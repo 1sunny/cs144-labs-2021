@@ -1,6 +1,7 @@
 cmake_minimum_required (VERSION 2.8.5)
 cmake_policy (SET CMP0054 NEW)
 project (Sponge)
+set(CMAKE_CXX_FLAGS_DEBUG "${CMAKE_CXX_FLAGS_DEBUG} -O0")
 
 include (etc/build_defs.cmake)
 include (etc/build_type.cmake)

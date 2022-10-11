@@ -2,6 +2,7 @@
 #define SPONGE_LIBSPONGE_BYTE_STREAM_HH
 
 #include <string>
+#include <queue>
 
 //! \brief An in-order byte stream.
 
@@ -11,7 +12,9 @@
 class ByteStream {
   private:
     // Your code here -- add private members as necessary.
-
+    std::deque<char> q = {};
+    size_t cap = 0, wr = 0, rd = 0;
+    bool input_end = 0;
     // Hint: This doesn't need to be a sophisticated data structure at
     // all, but if any of your tests are taking longer than a second,
     // that's a sign that you probably want to keep exploring

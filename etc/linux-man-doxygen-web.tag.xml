@@ -15122,8 +15122,8 @@
   </member>
   <member kind="function">
     <type></type>
-    <name>st</name>
-    <anchorfile>man4/st.4.html </anchorfile>
+    <name>_st</name>
+    <anchorfile>man4/_st.4.html </anchorfile>
     <anchor></anchor>
     <arglist></arglist>
   </member>

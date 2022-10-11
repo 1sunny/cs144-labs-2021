@@ -62,10 +62,14 @@ class FileDescriptor {
     void read(std::string &str, const size_t limit = std::numeric_limits<size_t>::max());
 
     //! Write a string, possibly blocking until all is written
-    size_t write(const char *str, const bool write_all = true) { return write(BufferViewList(str), write_all); }
+    size_t write(const char *str, const bool write_all = true) {
+        return write(BufferViewList(str), write_all);
+    }
 
     //! Write a string, possibly blocking until all is written
-    size_t write(const std::string &str, const bool write_all = true) { return write(BufferViewList(str), write_all); }
+    size_t write(const std::string &str, const bool write_all = true) {
+        return write(BufferViewList(str), write_all);
+    }
 
     //! Write a buffer (or list of buffers), possibly blocking until all is written
     size_t write(BufferViewList buffer, const bool write_all = true);

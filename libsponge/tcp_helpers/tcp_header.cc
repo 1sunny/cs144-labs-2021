@@ -96,7 +96,7 @@ string TCPHeader::to_string() const {
 string TCPHeader::summary() const {
     stringstream ss{};
     ss << "Header(flags=" << (syn ? "S" : "") << (ack ? "A" : "") << (rst ? "R" : "") << (fin ? "F" : "")
-       << ",seqno=" << seqno << ",ack=" << ackno << ",win=" << win << ")";
+       << ",seqno=" << seqno << ",ack=" << ackno << ",_win=" << win << ")";
     return ss.str();
 }
 

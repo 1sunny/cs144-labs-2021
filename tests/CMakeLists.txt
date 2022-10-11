@@ -1,5 +1,5 @@
 add_library (spongechecks STATIC send_equivalence_checker.cc tcp_fsm_test_harness.cc byte_stream_test_harness.cc)
-
+set(CMAKE_CXX_FLAGS_DEBUG "${CMAKE_CXX_FLAGS_DEBUG} -O0")
 macro (add_test_exec exec_name)
     add_executable ("${exec_name}" "${exec_name}.cc")
     target_link_libraries ("${exec_name}" spongechecks ${ARGN})

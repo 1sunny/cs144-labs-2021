@@ -163,7 +163,7 @@ struct Tick : public SenderAction {
 
     std::string description() const {
         std::ostringstream ss;
-        ss << _ms << " ms pass";
+        ss << _ms << " _duration pass";
         if (max_retx_exceeded.has_value()) {
             ss << " with max_retx_exceeded = " << max_retx_exceeded.value();
         }
@@ -175,7 +175,7 @@ struct Tick : public SenderAction {
         if (max_retx_exceeded.has_value() and
             max_retx_exceeded != (sender.consecutive_retransmissions() > TCPConfig::MAX_RETX_ATTEMPTS)) {
             std::ostringstream ss;
-            ss << "after " << _ms << "ms passed the TCP Sender reported\n\tconsecutive_retransmissions = "
+            ss << "after " << _ms << "_duration passed the TCP Sender reported\n\tconsecutive_retransmissions = "
                << sender.consecutive_retransmissions() << "\nbut it should have been\n\t";
             if (max_retx_exceeded.value()) {
                 ss << "greater than ";
@@ -307,7 +307,7 @@ struct ExpectSegment : public SenderExpectation {
             o << "ackno=" << ackno.value() << ",";
         }
         if (win.has_value()) {
-            o << "win=" << win.value() << ",";
+            o << "_win=" << win.value() << ",";
         }
         if (seqno.has_value()) {
             o << "seqno=" << seqno.value() << ",";
@@ -361,7 +361,7 @@ struct ExpectSegment : public SenderExpectation {
             throw SegmentExpectationViolation::violated_field("ackno", ackno.value(), seg.header().ackno);
         }
         if (win.has_value() and seg.header().win != win.value()) {
-            throw SegmentExpectationViolation::violated_field("win", win.value(), seg.header().win);
+            throw SegmentExpectationViolation::violated_field("_win", win.value(), seg.header().win);
         }
         if (payload_size.has_value() and seg.payload().size() != payload_size.value()) {
             throw SegmentExpectationViolation::violated_field(

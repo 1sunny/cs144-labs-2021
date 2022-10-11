@@ -3,8 +3,10 @@
 
 #include "buffer.hh"
 #include "tcp_header.hh"
-
+#include <string>
 #include <cstdint>
+
+using namespace std;
 
 //! \brief [TCP](\ref rfc::rfc793) segment
 class TCPSegment {

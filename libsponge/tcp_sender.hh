@@ -5,18 +5,20 @@
 #include "tcp_config.hh"
 #include "tcp_segment.hh"
 #include "wrapping_integers.hh"
+#include "sender_timer.hh"
 
 #include <functional>
 #include <queue>
+#include <map>
 
 //! \brief The "sender" part of a TCP implementation.
 
 //! Accepts a ByteStream, divides it up into segments and sends the
 //! segments, keeps track of which segments are still in-flight,
-//! maintains the Retransmission Timer, and retransmits in-flight
+//! maintains the Retransmission TCPTimer, and retransmits in-flight
 //! segments if the retransmission timer expires.
 class TCPSender {
-  private:
+private:
     //! our initial sequence number, the number for our SYN.
     WrappingInt32 _isn;
 
@@ -32,7 +34,23 @@ class TCPSender {
     //! the (absolute) sequence number for the next byte to be sent
     uint64_t _next_seqno{0};
 
-  public:
+    //---- my code ----
+    unsigned int _consecutive_retransmissions{0};
+    bool _syn_sent = false;
+    bool _fin_sent = false;
+
+    uint64_t _ackno;
+    size_t _remote_win;
+    uint64_t _bytes_in_flight{0};
+    TCPTimer timer;
+    std::queue<TCPSegment> _segments_outstanding{};
+    void send_segments(TCPSegment &seg);
+    //---- my code ----
+public:
+    // ---- my code ----
+    bool fin_sent() { return _fin_sent; }
+    // ---- my code ----
+
     //! Initialize a TCPSender
     TCPSender(const size_t capacity = TCPConfig::DEFAULT_CAPACITY,
               const uint16_t retx_timeout = TCPConfig::TIMEOUT_DFLT,
@@ -41,6 +59,7 @@ class TCPSender {
     //! \name "Input" interface for the writer
     //!@{
     ByteStream &stream_in() { return _stream; }
+
     const ByteStream &stream_in() const { return _stream; }
     //!@}
 
@@ -66,10 +85,10 @@ class TCPSender {
     //! \brief How many sequence numbers are occupied by segments sent but not yet acknowledged?
     //! \note count is in "sequence space," i.e. SYN and FIN each count for one byte
     //! (see TCPSegment::length_in_sequence_space())
-    size_t bytes_in_flight() const;
+    size_t bytes_in_flight() const { return _bytes_in_flight; };
 
     //! \brief Number of consecutive retransmissions that have occurred in a row
-    unsigned int consecutive_retransmissions() const;
+    unsigned int consecutive_retransmissions() const { return _consecutive_retransmissions; };
 
     //! \brief TCPSegments that the TCPSender has enqueued for transmission.
     //! \note These must be dequeued and sent by the TCPConnection,

@@ -69,6 +69,7 @@ int main() {
         }
 
         {
+
             ReassemblerTestHarness test{8};
 
             test.execute(SubmitSegment{"abcdefgh", 0});
@@ -100,7 +101,6 @@ int main() {
             test.execute(BytesAvailable{"abcdefgh"});
             test.execute(AtEof{});
         }
-
         {
             ReassemblerTestHarness test{8};
 
