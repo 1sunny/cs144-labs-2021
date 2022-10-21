@@ -29,8 +29,12 @@
 //! the network interface passes it up the stack. If it's an ARP
 //! request or reply, the network interface processes the frame
 //! and learns or replies as necessary.
+/**
+ * datagrams -> Ethernet frames(Ethernet destination address)
+ * Ethernet frames -> IPv4 datagram or process ARP req, ARP rep
+ */
 class NetworkInterface {
-  private:
+private:
     //! Ethernet (known as hardware, network-access-layer, or link-layer) address of the interface
     EthernetAddress _ethernet_address;
 
@@ -40,7 +44,22 @@ class NetworkInterface {
     //! outbound queue of Ethernet frames that the NetworkInterface wants sent
     std::queue<EthernetFrame> _frames_out{};
 
-  public:
+    /* my code */
+    std::unordered_map<uint32_t, EthernetAddress> _address_map{};
+
+    std::unordered_map<uint32_t, std::queue<InternetDatagram>> _dgram_queue{};
+
+    std::unordered_map<uint32_t, uint64_t> _last_sent_arp{};
+
+    std::unordered_map<uint32_t, uint64_t> _last_rev_arp{};
+
+    uint64_t _tick{0};
+    /* my code */
+public:
+    /* my code */
+    template <typename T>
+    void send_datagram(EthernetAddress dst, const T &data, uint16_t type);
+    /* my code */
     //! \brief Construct a network interface with given Ethernet (network-access-layer) and IP (internet-layer) addresses
     NetworkInterface(const EthernetAddress &ethernet_address, const Address &ip_address);
 
